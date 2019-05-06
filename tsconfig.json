@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2017",
+      "noImplicitAny": true,
+      "moduleResolution": "node",
+      "outDir": "built",
+      "baseUrl": ".",
+      "removeComments": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "sourceMap": true,
+      "skipLibCheck": true,
+      "paths": {
+        "*": [
+            "node_modules/*",
+            "src/types/*"
+        ]
+      }
+  },
+  "include": [
+      "src/**/*"
+  ],
+  "exclude": [
+      "test/**/*"
+  ]
+}
