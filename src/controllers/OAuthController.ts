@@ -1,4 +1,5 @@
-import { Context } from 'koa';
+import { ParameterizedContext } from 'koa';
+import { IRouterContext } from 'koa-router';
 import { URL } from 'url';
 import * as querystring from 'querystring';
 import axios from 'axios';
@@ -16,7 +17,7 @@ const redirectUri = url('/oauth/callback');
  *
  * @param {Context} ctx
  */
-export async function login(ctx: Context) {
+export async function login(ctx: ParameterizedContext<any, IRouterContext>) {
   const authorizeUrl = new URL(url(oauthConfig.authorize_url, true));
 
   authorizeUrl.searchParams.set('client_id', oauthConfig.client_id);
@@ -33,7 +34,7 @@ export async function login(ctx: Context) {
  * @param {string} code
  * @returns {Promise<IOptions>}
  */
-async function issueToken(ctx: Context, code: string): Promise<IOptions> {
+async function issueToken(ctx: ParameterizedContext<any, IRouterContext>, code: string): Promise<IOptions> {
   try {
     const body = querystring.stringify({
       code,
@@ -56,7 +57,7 @@ async function issueToken(ctx: Context, code: string): Promise<IOptions> {
  *
  * @param {Context} ctx
  */
-export async function callback(ctx: Context) {
+export async function callback(ctx: ParameterizedContext<any, IRouterContext>) {
   logger.debug('Receive oauth callback');
   const code = ctx.query.code;
   const response = await issueToken(ctx, code);

@@ -1,10 +1,12 @@
-import { Context } from 'koa';
+import { ParameterizedContext } from 'koa';
+import { IRouterContext } from 'koa-router';
 import axios from 'axios';
 import { config } from '../config';
 import logger from '../utils/logger';
 import { url } from '../utils';
 import { parseServices } from '../utils/services';
 import { HTTP_STATUS_CODE } from '../utils/constants';
+
 
 // Status for checking token
 enum CHECK_STATUS {
@@ -20,7 +22,7 @@ enum CHECK_STATUS {
  * @param {Context} ctx
  * @param {Next} next
  */
-export default async function isAuthorized (ctx: Context, next: Next) {
+export default async function isAuthorized (ctx: ParameterizedContext<any, IRouterContext>, next: Next) {
   if (!config('oauth.enabled')) {
     return await next();
   }
@@ -78,7 +80,7 @@ async function checkToken(clientID: string, token: string): Promise<CHECK_STATUS
  * @param {Context} ctx
  * @returns {string}
  */
-function getToken(ctx: Context): string {
+function getToken(ctx: ParameterizedContext<any, IRouterContext>): string {
   let token = ctx.session.token || ctx.cookies.get('token');
 
   // Try to parse from request header.
